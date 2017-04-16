@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map
+    version="1.0"
+    orientation="orthogonal"
+    renderorder="left-up"
+    width="64"
+    height="64"
+    tilewidth="16"
+    tileheight="16"
+    nextobjectid="1"
+>
+    <tileset
+        firstgid="1"
+        name="tileset_image"
+        tilewidth="16"
+        tileheight="16"
+        tilecount="4096"
+        columns="128"
+    >
+        <image
+            source="{{{tilesetImagePath}}}"
+            width="2048"
+            height="512"
+        />
+    </tileset>
+    <layer name="TileBoard" width="64" height="64">
+        <data encoding="csv">
+            {{boardData}}
+        </data>
+    </layer>
+</map>

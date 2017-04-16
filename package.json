@@ -1,0 +1,9 @@
+{
+  "name": "NW2TMX", "version": "1.0.0", "keywords": [
+    "converter", "nw", "tmx", "tiled", "maps"
+  ], "author": "JaveCross", "contributors": [], "main" : "main.js", "dependencies": {
+    "electron-log": "2.2.1", "electron-settings": "3.0.14", "mustache": "2.3.0"
+  }, "scripts": {
+    "start": "node main.js"
+  }, "licenses": []
+}

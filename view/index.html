@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>NW2TMX</title>
+        <meta charset="UTF-8">
+
+        <link rel="stylesheet" href="../resources/css/font-awesome.min.css" />
+        <link rel="stylesheet" href="../resources/css/index-page-style.css" />
+        <link rel="stylesheet" href="../resources/css/w3.css" />
+    </head>
+    <body>
+        <!-- MENU SLIDER -->
+        <div class="w3-sidebar w3-bar-block teal-dark" style="display: none" id="menu-slider">
+            <button
+                onclick="ca.jave.cross.IndexPageView.closeMenuSlider()"
+                class="w3-bar-item w3-button w3-amber w3-block title-bar"
+                >
+                <span class="w3-xlarge">&times;</span>
+                <span class="slider-header">Close</span>
+            </button>
+            <button
+                onclick="ca.jave.cross.IndexPageView.closeMenuSlider()"
+                class="w3-bar-item w3-button w3-block">
+                NW TO TMX
+            </button>
+            <a href="#" class="w3-bar-item w3-button w3-disabled">TMX TO NW</a>
+        </div>
+
+        <!-- MODAL COVER -->
+        <div id="app-modal" class="w3-modal">
+            <img
+                alt="Converting level files..."
+                src="../resources/images/ripple.svg"
+                />
+            <span>Converting</span>
+        </div>
+
+        <!-- CORE PAGE CONTENT -->
+        <header class="app-header w3-amber title-bar">
+            <button
+                onclick="ca.jave.cross.IndexPageView.openMenuSlider()"
+                class="w3-button w3-amber w3-xlarge"
+                >
+                <span class="fa fa fa-bars"></span>
+            </button>
+            <div class="header-title">
+                NW2TMX Converter
+            </div>
+        </header>
+        <main class="container">
+            <div class="page-container">
+                <div id="source-file-input" class="w3-card w3-teal w3-round-small input">
+                    <div class="file-input">
+                        <div class="main-text">NW source file(s)</div>
+                        <div class="icon"><span class="fa fa-cloud-upload"></span></div>
+                        <div class="sub-text">Drag and drop files</div>
+                    </div>
+                </div>
+                <div id="source-tileset-input" class="w3-card w3-teal w3-round-small input">
+                    <div class="file-input">
+                        <div class="main-text">Tileset source image</div>
+                        <div class="icon"><span class="fa fa-cloud-upload"></span></div>
+                        <div class="sub-text">Drag and drop file</div>
+                    </div>
+                </div>
+                <div id="destination-folder-input" class="action-card input">
+                    <button
+                        onclick="ca.jave.cross.IndexPageView.showDestinationDialog()"
+                        class="w3-button w3-teal w3-block w3-ripple"
+                        >
+                        <span class="wrapper">
+                            <span class="icon fa fa-folder-open-o"></span>
+                            <span class="text">Choose destination</span>
+                        </span>
+                        <span class="sub-text">(no folder selected)</span>
+                    </button>
+                </div>
+                <div id="convert-button-container" class="action-card">
+                    <button
+                        disabled
+                        onclick="ca.jave.cross.IndexPageView.convertNwFiles()"
+                        class="w3-button w3-amber w3-block w3-ripple"
+                        >
+                        Convert
+                    </button>
+                </div>
+            </div>
+        </main>
+
+        <!-- ABOUT APP MODAL -->
+        <div id="about-app-modal" class="w3-modal">
+            <div class="w3-modal-content w3-amber w3-card-4">
+                <div class="w3-container">
+                    <h2>NW2TMX Converter</h2>
+                    <h6>Version<span class="version-number"></span></h6>
+                    <hr/>
+                    <span>Developed by</span>
+                    <div>shyguy2 : Jave L. Cross</div>
+                    <hr/>
+                    <span>Source available via</span>
+                    <a class="github-external-link" href="#">GitHub</a>
+                    <button
+                        class="w3-button w3-teal w3-block"
+                        onclick="document.getElementById('about-app-modal').style.display = 'none';"
+                        >
+                        Close
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- OPEN SOURCE LICENSES MODAL -->
+        <div id="open-source-modal" class="w3-modal">
+            <div class="w3-modal-content w3-amber w3-card-4">
+                <div class="w3-container">
+                    <h2>NW2TMX Converter</h2>
+                    <span>Open source projects utilized by NW2TMX</span>
+                    <hr/>
+                    <div class="source-project">
+                        <a id="electron-source" href="#" class="source-name">Electron</a>
+                        <div class="source-license">
+                            <span>The MIT License (MIT)</span>
+                        </div>
+                        <div class="source-copyright">
+                            <span>Copyright (c) 2013-2017 GitHub Inc.</span>
+                        </div>
+                    </div>
+                    <div class="source-project">
+                        <a id="electron-log-source" href="#" class="source-name">Electron Logging</a>
+                        <div class="source-license">
+                            <span>The MIT License (MIT)</span>
+                        </div>
+                        <div class="source-copyright">
+                            <span>Copyright (c) 2016 Alexey Prokhorov</span>
+                        </div>
+                    </div>
+                    <div class="source-project">
+                        <a id="electron-settings-source" href="#" class="source-name">Electron Settings</a>
+                        <div class="source-license">
+                            <span>ISC License</span>
+                        </div>
+                        <div class="source-copyright">
+                            <span>Copyright (c) 2016-2017, Nathan Buchar</span>
+                        </div>
+                    </div>
+                    <div class="source-project">
+                        <a id="mustache-source" href="#" class="source-name">Mustache</a>
+                        <div class="source-license">
+                            <span>The MIT License</span>
+                        </div>
+                        <div class="source-copyright">
+                            <span>Copyright (c) 2009 Chris Wanstrath (Ruby)</span>
+                            <span>Copyright (c) 2010-2014 Jan Lehnardt (JavaScript)</span>
+                            <span>Copyright (c) 2010-2015 The mustache.js community</span>
+                        </div>
+                    </div>
+                    <div class="source-project">
+                        <a id="w3-css-source" href="#" class="source-name">W3 CSS</a>
+                        <div class="source-license">
+                            <span>No License</span>
+                        </div>
+                    </div>
+                    <div class="source-project">
+                        <a id="font-awesome-source" href="#" class="source-name">Font Awesome</a>
+                        <div class="source-copyright">
+                            <span>Font Awesome by Dave Gandy</span>
+                        </div>
+                    </div>
+
+                    <button
+                        class="w3-button w3-teal w3-block"
+                        onclick="document.getElementById('open-source-modal').style.display = 'none';"
+                        >
+                        Close
+                    </button>
+
+                </div>
+            </div>
+        </div>
+
+        <script src="../resources/js/constants.js"></script>
+        <script src="../resources/renderers/index-renderer.js"></script>
+    </body>
+</html>

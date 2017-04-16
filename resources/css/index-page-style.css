@@ -1,0 +1,244 @@
+/*
+    Created on : 13-Apr-2017, 7:36:28 PM
+    Author     : Jave Cross
+*/
+html {
+    height: 100%;
+}
+
+body {
+    margin: 0;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    font-family: sans-serif;
+}
+
+.teal-dark {
+    background: #00796B;
+}
+
+.title-bar {
+    min-height: 3.5em;
+}
+/*
+    MODAL COVER
+*/
+#app-modal.w3-modal.visible {
+    display: flex;
+    flex-direction: column;
+    flex: 1 0;
+    justify-content: center;
+    padding: 0;
+    align-items: center;
+
+    color: #FFFFFF;
+    text-transform: uppercase;
+    font-weight: 700;
+}
+
+/*
+    MENU SLIDER
+*/
+#menu-slider .slider-header {
+    font-size: 21px;
+    text-transform: uppercase;
+    font-weight: 700;
+    margin: 0 1em;
+}
+
+#menu-slider.teal-dark {
+    background: #00796B;
+    color: #FFFFFF;
+}
+
+
+/*
+    BODY CONTENT
+*/
+
+header.app-header {
+    display: flex;
+    align-items: center;
+    color: #FFFFFF;
+}
+
+header .header-title {
+    font-size: 21px;
+
+    text-transform: uppercase;
+    font-weight: 700;
+    margin: 0 1em;
+}
+
+main.container {
+    display: flex;
+    flex: 1 0 auto;
+    flex-direction: column;
+}
+
+main .card {
+    flex: 1 0 auto;
+}
+
+.page-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    flex: 1 0 auto;
+    background: #00796B;
+    padding: .25em;
+}
+
+.page-container .w3-card {
+    display: flex;
+    flex: 1 0 auto;
+
+    margin: .25em 0;
+}
+
+div.action-card {
+    min-height: 5em;
+    display: flex;
+    font-weight: 800;
+    margin: .25em 0;
+}
+
+div.action-card button {
+    text-transform: uppercase;
+}
+
+input.source-file {
+    display: flex;
+    flex: 1 0 auto;
+
+    border: 2px dashed #00796B;
+    margin: .5em;
+}
+
+.file-input {
+    display: flex;
+    flex: 1 0 auto;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    border: 4px dashed #00796B;
+    margin: .25em;
+
+    /*color: ;*/
+    color: #FFFFFF;
+    opacity: 0.7;
+}
+
+.file-input .main-text {
+    text-transform: uppercase;
+}
+
+.file-input .fa-cloud-upload {
+    font-size: 50px;
+    color: #757575;
+}
+
+.file-input .fa-cloud {
+    font-size: 50px;
+    opacity: 1;
+}
+
+.file-input .fa-cloud.all-valid {
+    color: #90ee90;
+}
+
+.file-input .fa-cloud.some-valid {
+    color: red;
+}
+
+button.w3-button {
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+}
+
+.action-card button {
+    align-items: center;
+}
+
+#destination-folder-input button .wrapper {
+    align-items: center;
+    display: flex;
+}
+
+.input .sub-text {
+    font-size: 10px;
+    text-overflow: ellipsis;
+    width: 90%;
+    overflow: hidden;
+    direction: rtl;
+    text-align: center;
+    white-space: nowrap;
+}
+
+button.w3-button .icon {
+    font-size: 40px;
+}
+
+button.w3-button .text {
+    padding: 0 1em;
+}
+
+
+/*
+    ABOUT APP MODAL
+*/
+
+span.version-number {
+    margin: 0 .25em;
+}
+
+#about-app-modal.w3-modal .w3-modal-content {
+    padding: 2em 0;
+}
+
+#about-app-modal button {
+    margin: 2em 0 0 0;
+    align-items: center;
+    text-transform: uppercase;
+    font-weight: 700;
+}
+
+/*
+    OPEN SOURCE MODAL
+*/
+
+#open-source-modal .w3-modal-content {
+    height: 90%;
+    overflow-y: auto;
+}
+
+.source-project {
+    margin: 1em 0;
+}
+
+.source-project .source-name {
+    font-weight: 700;
+    text-transform: uppercase;
+}
+
+.source-project .source-name::after {
+    content: "\f14c";
+    font: normal normal normal 14px/1 FontAwesome;
+    padding: 0 .5em;
+}
+
+.source-project .source-copyright {
+    display: flex;
+    flex-direction: column;
+    font-size: 10px;
+}
+
+#open-source-modal button {
+    margin: 2em 0;
+    align-items: center;
+    text-transform: uppercase;
+    font-weight: 700;
+}
+
