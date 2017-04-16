@@ -272,6 +272,11 @@ IPC.on(CONSTANTS.CONVERT_NW_FILES_COMMAND, (event, arg) => {
         event.sender.send(CONSTANTS.COMPLETED_CONVERSION_COMMAND);
         return;
     }
+    SETTINGS.set('prefs', {
+        'tileset': arg.sourceTilesetFile,
+        'destination': arg.destinationFolderPath
+    });
+
     // DETERMINE CONVERSION TYPE
     // FOR NOW, ASSUME NW.
     synchronizedSingleNwFileConversion(
@@ -280,7 +285,6 @@ IPC.on(CONSTANTS.CONVERT_NW_FILES_COMMAND, (event, arg) => {
         arg.destinationFolderPath,
         {},
         function (results) {
-            console.log(results);
             event.sender.send(CONSTANTS.COMPLETED_CONVERSION_COMMAND, results);
         }
     );
