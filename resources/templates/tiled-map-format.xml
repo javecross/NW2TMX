@@ -2,9 +2,9 @@
 <map
     version="1.0"
     orientation="orthogonal"
-    renderorder="left-up"
-    width="64"
-    height="64"
+    renderorder="left-down"
+    width="{{mapWidthInTiles}}"
+    height="{{mapHeightInTiles}}"
     tilewidth="16"
     tileheight="16"
     nextobjectid="1"
@@ -23,7 +23,7 @@
             height="512"
         />
     </tileset>
-    <layer name="TileBoard" width="64" height="64">
+    <layer name="{{boardLayerTitle}}" width="{{mapWidthInTiles}}" height="{{mapHeightInTiles}}">
         <data encoding="csv">
             {{boardData}}
         </data>

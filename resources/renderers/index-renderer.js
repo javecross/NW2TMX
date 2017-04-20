@@ -172,7 +172,7 @@ ca.jave.cross.IndexPageView = (function () {
             updateConvertButtonStatus();
 
             document.getElementById('app-modal').className = 'w3-modal visible';
-            IPC.send(CONSTANTS.CONVERT_NW_FILES_COMMAND, conversionParams);
+            IPC.send(CONSTANTS.CONVERT_FILES_COMMAND, conversionParams);
         },
         initializeView: function () {
             let sourceFileInput = document.getElementById('source-file-input'),

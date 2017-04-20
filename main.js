@@ -1,5 +1,5 @@
 /**
- * Tiled NW Level Converter.
+ * NW2TMX.
  *
  * @since 12/04/2017
  * @author Jave Cross
@@ -20,7 +20,6 @@ const
     APP = ELECTRON.app,
     BROWSER_WINDOW = ELECTRON.BrowserWindow,
     INDEX_PAGE_PATH = '/view/index.html';
-
 LOGGER.transports.file.level = 'warn';
 LOGGER.transports.file.maxSize = 5 * 1024 * 1024;
 LOGGER.transports.file.file = __dirname + '/log.txt';
@@ -138,21 +137,121 @@ function initializeMainWindow() {
     });
 }
 
-// App Triggers.
-APP.on('ready', initializeMainWindow);
-
-APP.on('window-all-closed', () => {
-    if (process.platform !== 'darwin') {
-        APP.quit();
+function sequentialFileConversion(fileArray, tileset, destination, results, callback) {
+    if (!results) {
+        results = {};
     }
-});
-
-APP.on('activate', () => {
-    if (mainWindow === null) {
-        initializeMainWindow();
+    if (!results.success) {
+        results.success = 0;
     }
-});
+    if (!results.error) {
+        results.error = 0;
+    }
 
+    if (!fileArray || !fileArray.length) {
+        callback(results);
+        return;
+    }
+
+    let currentFile = fileArray.shift(),
+        fileBaseName,
+        fileExtension;
+
+    if (!currentFile) {
+        callback(results);
+        return;
+    }
+    fileExtension = PATH.extname(currentFile).substring(1);
+    fileBaseName = PATH.basename(currentFile, PATH.extname(currentFile));
+    switch (fileExtension) {
+        case 'gmap':
+        {
+            LOGGER.info('[MAIN] Processing GMAP file: ' + fileBaseName);
+            BOARD_CONVERTER.convertMapFileToJson(currentFile, (err, jsonMap) => {
+                if (err) {
+                    LOGGER.warn('[MAIN] Unable to convert map: ' + err.message);
+                    results.error++;
+                    sequentialFileConversion(fileArray, tileset, destination, results, callback);
+                    return;
+                }
+
+                LOGGER.info('[MAIN] Converted gmap file to JSON: ' + currentFile);
+
+                let convertedMapName = fileBaseName + '.' + CONSTANTS.TMX_FILE_EXTENSION,
+                    finalFileName = destination + '/' + convertedMapName,
+                    tmxData = BOARD_CONVERTER.convertJsonLevelToTmx(jsonMap, tileset);
+
+                LOGGER.debug(
+                    '[MAIN] Preparing to save TMX data to destination: ' +
+                    finalFileName
+                    );
+                FILE_SYSTEM.writeFile(finalFileName, tmxData, (err) => {
+                    if (err) {
+                        LOGGER.warn('[MAIN] Unable to save file: ' + err.message);
+                        results.error++;
+                        sequentialFileConversion(
+                            fileArray,
+                            tileset,
+                            destination,
+                            results,
+                            callback
+                            );
+                        return;
+                    }
+                    LOGGER.info('[MAIN] Saved map file: ' + finalFileName);
+                    results.success++;
+                    sequentialFileConversion(fileArray, tileset, destination, results, callback);
+                });
+            });
+            break;
+        }
+        case 'nw':
+        {
+            LOGGER.info('[MAIN] Processing NW file: ' + fileBaseName);
+            BOARD_CONVERTER.convertNwFileToJson(currentFile, (err, jsonLevel) => {
+                if (err) {
+                    LOGGER.warn('[MAIN] Unable to convert level: ' + err.message);
+                    results.error++;
+                    sequentialFileConversion(fileArray, tileset, destination, results, callback);
+                    return;
+                }
+                let tmxData = BOARD_CONVERTER.convertJsonLevelToTmx(jsonLevel, tileset),
+                    convertedName = PATH.basename(currentFile, PATH.extname(currentFile))
+                    + '.'
+                    + CONSTANTS.TMX_FILE_EXTENSION;
+
+                LOGGER.debug('[MAIN] Saving "' + destination + '/' + convertedName + '"');
+
+                FILE_SYSTEM.writeFile(destination + '/' + convertedName, tmxData, (err) => {
+                    if (err) {
+                        LOGGER.warn('[MAIN] Unable to write converted file: ' + err.message);
+                        results.error++;
+                        sequentialFileConversion(
+                            fileArray,
+                            tileset,
+                            destination,
+                            results,
+                            callback
+                            );
+                        return;
+                    }
+                    LOGGER.debug('[MAIN] Processed and saved.');
+                    results.success++;
+                    sequentialFileConversion(fileArray, tileset, destination, results, callback);
+                });
+            });
+            break;
+        }
+        default:
+        {
+            LOGGER.info('[MAIN] Unable to process file: ' + currentFile + ' unknown extension.');
+            results.error++;
+            sequentialFileConversion(fileArray, tileset, destination, results, callback);
+        }
+    }
+}
+
+// ------------------- EVENTS -------------------------
 
 IPC.on(CONSTANTS.ERROR_NO_VALID_SOURCE_FILES, () => {
     DIALOG.showErrorBox(
@@ -175,66 +274,7 @@ IPC.on(CONSTANTS.ERROR_INVALID_TILESET_FORMAT, () => {
         );
 });
 
-function synchronizedSingleNwFileConversion(fileArray, tileset, destination, results, callback) {
-
-    if (!results) {
-        results = {};
-    }
-
-    if (!results.success) {
-        results.success = 0;
-    }
-    if (!results.error) {
-        results.error = 0;
-    }
-
-    if (!fileArray || !fileArray.length) {
-        callback(results);
-        return;
-    }
-
-    let singleNwFile = fileArray.pop();
-    if (!singleNwFile) {
-        callback(results);
-        return;
-    }
-    LOGGER.info('[MAIN] Processing: ' + singleNwFile);
-    BOARD_CONVERTER.convertNwFileToJson(singleNwFile, (err, jsonLevel) => {
-        if (err) {
-            LOGGER.warn('[MAIN] Unable to convert level: ' + err.message);
-            results.error++;
-            synchronizedSingleNwFileConversion(fileArray, tileset, destination, results, callback);
-            return;
-        }
-        let tmxData = BOARD_CONVERTER.convertJsonLevelToTmx(jsonLevel, tileset),
-            convertedName = PATH.basename(singleNwFile, PATH.extname(singleNwFile))
-            + '.'
-            + CONSTANTS.TMX_FILE_EXTENSION;
-
-        LOGGER.debug('[MAIN] Saving "' + destination + '/' + convertedName + '"');
-
-        FILE_SYSTEM.writeFile(destination + '/' + convertedName, tmxData, (err) => {
-            if (err) {
-                LOGGER.warn('[MAIN] Unable to write converted file: ' + err.message);
-                results.error++;
-                synchronizedSingleNwFileConversion(
-                    fileArray,
-                    tileset,
-                    destination,
-                    results,
-                    callback
-                    );
-                return;
-            }
-            LOGGER.debug('[MAIN] Processed and saved.');
-            results.success++;
-            synchronizedSingleNwFileConversion(fileArray, tileset, destination, results, callback);
-        });
-    });
-}
-
-
-IPC.on(CONSTANTS.CONVERT_NW_FILES_COMMAND, (event, arg) => {
+IPC.on(CONSTANTS.CONVERT_FILES_COMMAND, (event, arg) => {
     // VALIDATION
     if (!arg) {
         // ERR.
@@ -277,9 +317,7 @@ IPC.on(CONSTANTS.CONVERT_NW_FILES_COMMAND, (event, arg) => {
         'destination': arg.destinationFolderPath
     });
 
-    // DETERMINE CONVERSION TYPE
-    // FOR NOW, ASSUME NW.
-    synchronizedSingleNwFileConversion(
+    sequentialFileConversion(
         arg.sourceFileArray,
         arg.sourceTilesetFile,
         arg.destinationFolderPath,
@@ -290,7 +328,17 @@ IPC.on(CONSTANTS.CONVERT_NW_FILES_COMMAND, (event, arg) => {
     );
 });
 
+// App Triggers.
+APP.on('ready', initializeMainWindow);
 
+APP.on('window-all-closed', () => {
+    if (process.platform !== 'darwin') {
+        APP.quit();
+    }
+});
 
-
-
+APP.on('activate', () => {
+    if (mainWindow === null) {
+        initializeMainWindow();
+    }
+});
