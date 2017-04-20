@@ -5,7 +5,7 @@
  */
 
 const CONSTANTS = {
-    VERSION_NUMBER: '20170415-001',
+    VERSION_NUMBER: '20170419',
 
     TILESET_FILE_REGEX: (/.png|.gif/),
     LEVEL_FILE_REGEX: (/.nw|.gmap/),
