@@ -222,7 +222,7 @@ ca.jave.cross.IndexPageView = (function () {
                     {
                         'properties': ['openFile', 'multiSelections'],
                         'filters': [
-                            {'name': 'Levels', 'extensions': ['nw']}
+                            {'name': 'Levels', 'extensions': ['nw', 'gmap']}
                         ]
                     },
                     userSelectedSourceFile
